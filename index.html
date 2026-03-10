@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <style>
+      :root {
+        --flex-blue: #00769a;
+        --error-red: #d32f2f;
+        --success-green: #2e7d32;
+      }
+      html,
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        touch-action: none;
+        background: #fff;
+        position: fixed;
+      }
+      body {
+        font-family: -apple-system, sans-serif;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header {
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        border-bottom: 1px solid #eee;
+        padding-top: env(safe-area-inset-top);
+      }
+
+      /* SKOR TABLOSU GÜNCELLENDİ */
+      .stats {
+        padding: 8px 5px;
+        background: #fdfdfd;
+        font-size: 9px;
+        display: flex;
+        justify-content: space-around;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+        line-height: 1.4;
+      }
+      .stats div {
+        flex: 1;
+        border-right: 1px solid #eee;
+      }
+      .stats div:last-child {
+        border-right: none;
+      }
+      .stats b {
+        display: block;
+        font-size: 12px;
+        color: #333;
+      }
+      .stats span {
+        font-family: monospace;
+        font-size: 13px;
+        font-weight: bold;
+        color: var(--flex-blue);
+      }
+
+      .main-container {
+        flex-grow: 1;
+        padding: 10px;
+        position: relative;
+      }
+      .offer-card {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px 12px;
+        margin: 5px 10px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        display: none;
+      }
+
+      /* MESAJ EKRANI */
+      #result-msg {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+        display: none;
+        padding: 20px;
+        border-radius: 8px;
+        z-index: 50;
+      }
+
+      .footer {
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        padding: 8px 15px 12px 15px;
+        margin-bottom: -15px;
+        border-top: 1px solid #eee;
+        display: flex;
+        gap: 10px;
+        box-sizing: border-box;
+        z-index: 10000;
+      }
+      .btn {
+        height: 48px;
+        flex: 1;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      #refresh-btn {
+        background: var(--flex-blue);
+        color: white;
+        width: 100%;
+      }
+      #decline-btn {
+        background: white;
+        color: var(--flex-blue);
+        border: 1px solid var(--flex-blue);
+        display: none;
+      }
+      #schedule-btn {
+        background: var(--flex-blue);
+        color: white;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">Offers</div>
+
+    <div class="stats">
+      <div><b>Refresh</b><span id="ref-ms">0</span>ms</div>
+      <div><b>Offer</b><span id="off-ms">0</span>ms</div>
+      <div><b>Schedule</b><span id="sch-ms">0</span>ms</div>
+    </div>
+
+    <div id="result-msg"></div>
+
+    <div class="main-container">
+      <div id="ui-elements" style="font-size: 13px">
+        <div
+          style="
+            color: var(--flex-blue);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+          "
+        >
+          <b>≡ Filter</b> <span style="color: #666">0 of 20 offers</span>
+        </div>
+        <div
+          style="
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            display: inline-block;
+          "
+        >
+          Stations (1) ✕
+        </div>
+        <div
+          id="empty-msg"
+          style="margin-top: 40px; text-align: center; color: #bbb"
+        >
+          Searching for blocks...
+        </div>
+      </div>
+
+      <div id="offer-card" class="offer-card">
+        <b style="font-size: 14px">Whole Foods - Albany</b><br />
+        <span style="font-size: 12px">2 hr block • Today</span><br />
+        <b style="font-size: 16px">$54.00</b>
+      </div>
+
+      <div id="detail-view" style="display: none; font-size: 13px">
+        <h3 style="margin: 0 0 10px 0">Offer Details</h3>
+        <div
+          style="
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fafafa;
+          "
+        >
+          <b>Albany (WF)</b>
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0" />
+          <b style="font-size: 18px">$54.00</b>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button id="refresh-btn" class="btn">Refresh</button>
+      <button id="decline-btn" class="btn">Decline</button>
+      <button id="schedule-btn" class="btn">Schedule</button>
+    </div>
+
+    <script>
+      const rBtn = document.getElementById("refresh-btn");
+      const sBtn = document.getElementById("schedule-btn");
+      const dBtn = document.getElementById("decline-btn");
+      const card = document.getElementById("offer-card");
+      const msg = document.getElementById("result-msg");
+
+      let offerIsReady = false;
+      let tRefresh, tOffer, tSchedule;
+      let limit = 150; // Rekabet sınırı: 350ms
+
+      function startGen() {
+        offerIsReady = false;
+        setTimeout(
+          () => {
+            offerIsReady = true;
+          },
+          Math.random() * 5000 + 2000,
+        );
+      }
+
+      rBtn.addEventListener("touchstart", (e) => {
+        if (rBtn.disabled) return;
+        msg.style.display = "none";
+        rBtn.disabled = true;
+        rBtn.innerText = "Refreshing...";
+        tRefresh = performance.now(); // Refresh başlangıcı
+
+        const randomRefreshDelay =
+          Math.floor(Math.random() * (1200 - 700 + 1)) + 700;
+
+        setTimeout(() => {
+          const refreshTime = Math.round(performance.now() - tRefresh);
+          document.getElementById("ref-ms").innerText = refreshTime;
+
+          if (offerIsReady) {
+            document.getElementById("empty-msg").style.display = "none";
+            card.style.display = "block";
+            tOffer = performance.now(); // Offer göründüğü an
+          }
+          rBtn.disabled = false;
+          rBtn.innerText = "Refresh";
+        }, randomRefreshDelay);
+      });
+
+      card.addEventListener("touchstart", () => {
+        const offerTime = Math.round(performance.now() - tOffer);
+        document.getElementById("off-ms").innerText = offerTime;
+
+        document.getElementById("detail-view").style.display = "block";
+        document.getElementById("ui-elements").style.display = "none";
+        card.style.display = "none";
+        rBtn.style.display = "none";
+        dBtn.style.display = "block";
+        sBtn.style.display = "block";
+        tSchedule = performance.now(); // Onay ekranı açıldığı an
+      });
+
+      sBtn.addEventListener("touchstart", () => {
+        const scheduleTime = Math.round(performance.now() - tSchedule);
+        document.getElementById("sch-ms").innerText = scheduleTime;
+
+        const offMs = parseInt(document.getElementById("off-ms").innerText);
+
+        // KARAR MEKANİZMASI
+        if (offMs > limit || scheduleTime > limit) {
+          msg.innerText = "This offer has been taken by another driver";
+          msg.style.color = "var(--error-red)";
+        } else {
+          msg.innerText = "Scheduled";
+          msg.style.color = "var(--success-green)";
+        }
+        msg.style.display = "block";
+        reset();
+      });
+
+      dBtn.addEventListener("touchstart", reset);
+
+      function reset() {
+        document.getElementById("detail-view").style.display = "none";
+        document.getElementById("ui-elements").style.display = "block";
+        document.getElementById("empty-msg").style.display = "block";
+        rBtn.style.display = "block";
+        dBtn.style.display = "none";
+        sBtn.style.display = "none";
+        startGen();
+      }
+
+      document.addEventListener("touchmove", (e) => e.preventDefault(), {
+        passive: false,
+      });
+      window.onload = startGen;
+    </script>
+  </body>
+</html>
