@@ -90,9 +90,9 @@ cBtn.addEventListener("touchstart", () => {
   document.getElementById("a-ms").innerText = aMs;
 
   let status = "fail";
-  if (rMs < 110) {
+  if (rMs < 10) {
     showFeedback("⚠️ ROBOTIC!", "orange");
-  } else if (rMs > 280 || aMs > 280) {
+  } else if (rMs > 150 || aMs > 150) {
     showFeedback("❌ SLOW", "var(--error)");
   } else {
     showFeedback("✅ PERFECT", "var(--success)");
