@@ -1,0 +1,192 @@
+:root {
+  --accent: #ff8c00;
+  --bg: #121212;
+  --card: #1e1e1e;
+  --text: #e0e0e0;
+  --success: #00e676;
+  --error: #ff5252;
+  --info: #2979ff;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #000;
+  border-bottom: 2px solid var(--accent);
+  padding: 0 20px;
+}
+
+.icon-btn {
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--accent);
+}
+
+.stats-bar {
+  display: flex;
+  background: #1a1a1a;
+  padding: 10px;
+  border-bottom: 1px solid #333;
+  font-size: 10px;
+  text-align: center;
+}
+.stats-bar div {
+  flex: 1;
+  border-right: 1px solid #333;
+}
+.stats-bar b {
+  display: block;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+#analytics-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  z-index: 2000;
+  display: none;
+  flex-direction: column;
+  padding: 20px;
+  padding-top: 60px;
+  overflow-y: auto;
+}
+
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--card);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #333;
+}
+.stat-card h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #aaa;
+}
+.stat-card .val {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--accent);
+  margin-top: 5px;
+}
+
+.graph-container {
+  display: flex;
+  align-items: flex-end;
+  height: 100px;
+  gap: 5px;
+  margin-top: 15px;
+}
+.graph-bar {
+  flex: 1;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+  min-height: 5px;
+  transition: height 0.5s;
+}
+
+.container {
+  flex-grow: 1;
+  position: relative;
+  padding: 20px;
+}
+
+.training-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 6px solid var(--accent);
+  display: none;
+  position: absolute;
+  top: 120px;
+  left: 15px;
+  right: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.price-tag {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--success);
+}
+
+#coach-feedback {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  display: none;
+  z-index: 100;
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 15px 40px 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  height: 55px;
+  flex: 1;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+.primary-btn {
+  background: var(--accent);
+  color: #000;
+}
+.success-btn {
+  background: var(--success);
+  color: #000;
+  display: none;
+}
+.reset-btn {
+  background: #444;
+  color: #fff;
+  width: 100%;
+  margin-top: 10px;
+}

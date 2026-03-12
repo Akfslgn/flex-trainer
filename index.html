@@ -7,178 +7,8 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <title>Gig Reflex Pro - Analytics</title>
-    <style>
-      :root {
-        --accent: #ff8c00;
-        --bg: #121212;
-        --card: #1e1e1e;
-        --text: #e0e0e0;
-        --success: #00e676;
-        --error: #ff5252;
-        --info: #2979ff;
-      }
-      * {
-        -webkit-tap-highlight-color: transparent;
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        padding: 0;
-        background: var(--bg);
-        color: var(--text);
-        font-family: -apple-system, sans-serif;
-        height: 100vh;
-        overflow: hidden;
-      }
-
-      /* HEADER & ICONS */
-      .app-header {
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: #000;
-        border-bottom: 2px solid var(--accent);
-        padding: 0 20px;
-      }
-      .icon-btn {
-        font-size: 24px;
-        cursor: pointer;
-        color: var(--accent);
-      }
-
-      /* STATS BAR */
-      .stats-bar {
-        display: flex;
-        background: #1a1a1a;
-        padding: 10px;
-        border-bottom: 1px solid #333;
-        font-size: 10px;
-        text-align: center;
-      }
-      .stats-bar div {
-        flex: 1;
-        border-right: 1px solid #333;
-      }
-      .stats-bar b {
-        display: block;
-        font-size: 12px;
-        color: var(--accent);
-      }
-
-      /* ANALYTICS OVERLAY */
-      #analytics-page {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--bg);
-        z-index: 2000;
-        display: none;
-        flex-direction: column;
-        padding: 20px;
-        padding-top: 60px;
-        overflow-y: auto;
-      }
-      .stat-card {
-        background: var(--card);
-        padding: 15px;
-        border-radius: 12px;
-        margin-bottom: 15px;
-        border: 1px solid #333;
-      }
-      .stat-card h3 {
-        margin: 0;
-        font-size: 14px;
-        color: #aaa;
-      }
-      .stat-card .val {
-        font-size: 24px;
-        font-weight: bold;
-        color: var(--accent);
-        margin-top: 5px;
-      }
-
-      /* MINI GRAPH SIMULATION */
-      .graph-container {
-        display: flex;
-        align-items: flex-end;
-        height: 100px;
-        gap: 5px;
-        margin-top: 15px;
-      }
-      .graph-bar {
-        flex: 1;
-        background: var(--accent);
-        border-radius: 3px 3px 0 0;
-        min-height: 5px;
-        transition: height 0.5s;
-      }
-
-      /* MAIN UI Elements */
-      .container {
-        flex-grow: 1;
-        position: relative;
-        padding: 20px;
-      }
-      .training-card {
-        background: var(--card);
-        border-radius: 12px;
-        padding: 16px;
-        border-left: 6px solid var(--accent);
-        display: none;
-        position: absolute;
-        top: 120px;
-        left: 15px;
-        right: 15px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-      }
-
-      #coach-feedback {
-        position: absolute;
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 85%;
-        text-align: center;
-        font-weight: bold;
-        font-size: 20px;
-        display: none;
-        z-index: 100;
-        padding: 20px;
-        border-radius: 15px;
-        background: rgba(0, 0, 0, 0.9);
-      }
-
-      .footer {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        padding: 20px 15px 40px 15px;
-        display: flex;
-        gap: 10px;
-      }
-      .btn {
-        height: 55px;
-        flex: 1;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: bold;
-        border: none;
-      }
-      #main-action {
-        background: var(--accent);
-        color: #000;
-      }
-      #confirm-action {
-        background: var(--success);
-        color: #000;
-        display: none;
-      }
-    </style>
+    <title>Gig Reflex Pro</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="app-header">
@@ -187,14 +17,7 @@
     </div>
 
     <div id="analytics-page">
-      <div
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 20px;
-        "
-      >
+      <div class="analytics-header">
         <h2 style="margin: 0">Analytics</h2>
         <span class="icon-btn" onclick="toggleAnalytics()">✕</span>
       </div>
@@ -214,13 +37,7 @@
         <div id="graph" class="graph-container"></div>
       </div>
 
-      <button
-        class="btn"
-        style="background: #444; color: #fff; width: 100%"
-        onclick="clearStats()"
-      >
-        RESET DATA
-      </button>
+      <button class="btn reset-btn" onclick="clearStats()">RESET DATA</button>
     </div>
 
     <div class="stats-bar">
@@ -233,152 +50,18 @@
       <div id="target-card" class="training-card">
         <h2>NEW OPPORTUNITY</h2>
         <p>Station: ALPHA-1</p>
-        <div style="font-size: 22px; font-weight: bold; color: var(--success)">
-          $72.00
-        </div>
+        <div class="price-tag">$72.00</div>
       </div>
       <div id="coach-feedback"></div>
     </div>
 
     <div class="footer">
-      <button id="main-action" class="btn">REFRESH SCAN</button>
-      <button id="confirm-action" class="btn">CONFIRM ACTION</button>
+      <button id="main-action" class="btn primary-btn">REFRESH SCAN</button>
+      <button id="confirm-action" class="btn success-btn">
+        CONFIRM ACTION
+      </button>
     </div>
 
-    <script>
-      let history = JSON.parse(localStorage.getItem("reflexHistory")) || [];
-      const mBtn = document.getElementById("main-action");
-      const cBtn = document.getElementById("confirm-action");
-      const card = document.getElementById("target-card");
-      const feedback = document.getElementById("coach-feedback");
-      let tScan,
-        tReact,
-        tAction,
-        isReady = false;
-
-      function toggleAnalytics() {
-        const page = document.getElementById("analytics-page");
-        if (page.style.display === "flex") {
-          page.style.display = "none";
-        } else {
-          updateAnalyticsUI();
-          page.style.display = "flex";
-        }
-      }
-
-      function updateAnalyticsUI() {
-        const pb = history.length
-          ? Math.min(...history.map((h) => h.react))
-          : 0;
-        const successCount = history.filter(
-          (h) => h.status === "success",
-        ).length;
-        const rate = history.length
-          ? Math.round((successCount / history.length) * 100)
-          : 0;
-
-        document.getElementById("pb-val").innerText = pb + " ms";
-        document.getElementById("success-rate").innerText = rate + "%";
-
-        const graph = document.getElementById("graph");
-        graph.innerHTML = "";
-        history.slice(-10).forEach((h) => {
-          const bar = document.createElement("div");
-          bar.className = "graph-bar";
-          bar.style.height = Math.min(h.react / 5, 100) + "%";
-          if (h.status !== "success") bar.style.background = "var(--error)";
-          graph.appendChild(bar);
-        });
-      }
-
-      function saveAttempt(react, status) {
-        history.push({ react, status, time: Date.now() });
-        if (history.length > 100) history.shift();
-        localStorage.setItem("reflexHistory", JSON.stringify(history));
-      }
-
-      function clearStats() {
-        if (confirm("Clear all data?")) {
-          history = [];
-          localStorage.clear();
-          updateAnalyticsUI();
-        }
-      }
-
-      mBtn.addEventListener("touchstart", (e) => {
-        if (mBtn.disabled) return;
-        feedback.style.display = "none";
-        mBtn.disabled = true;
-        tScan = performance.now();
-        setTimeout(
-          () => {
-            document.getElementById("s-ms").innerText = Math.round(
-              performance.now() - tScan,
-            );
-            if (isReady) {
-              if (window.navigator.vibrate) window.navigator.vibrate(40);
-              card.style.display = "block";
-              tReact = performance.now();
-            }
-            mBtn.disabled = false;
-          },
-          Math.random() * 500 + 700,
-        );
-      });
-
-      card.addEventListener("touchstart", () => {
-        document.getElementById("r-ms").innerText = Math.round(
-          performance.now() - tReact,
-        );
-        card.style.display = "none";
-        mBtn.style.display = "none";
-        cBtn.style.display = "block";
-        tAction = performance.now();
-      });
-
-      cBtn.addEventListener("touchstart", () => {
-        const rMs = parseInt(document.getElementById("r-ms").innerText);
-        const aMs = Math.round(performance.now() - tAction);
-        document.getElementById("a-ms").innerText = aMs;
-
-        let status = "fail";
-        if (rMs < 110) {
-          showFeedback("⚠️ ROBOTIC!", "orange");
-        } else if (rMs > 280 || aMs > 280) {
-          showFeedback("❌ SLOW", "var(--error)");
-        } else {
-          showFeedback("✅ PERFECT", "var(--success)");
-          status = "success";
-        }
-
-        saveAttempt(rMs, status);
-        resetApp();
-      });
-
-      function showFeedback(text, color) {
-        feedback.innerText = text;
-        feedback.style.color = color;
-        feedback.style.display = "block";
-      }
-
-      function resetApp() {
-        cBtn.style.display = "none";
-        mBtn.style.display = "block";
-        isReady = false;
-        setTimeout(
-          () => {
-            isReady = true;
-          },
-          Math.random() * 3000 + 2000,
-        );
-      }
-
-      document.addEventListener("touchmove", (e) => e.preventDefault(), {
-        passive: false,
-      });
-      window.onload = () => {
-        isReady = true;
-      };
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
