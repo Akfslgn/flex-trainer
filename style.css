@@ -125,7 +125,7 @@ body {
 .compact-card {
   background: var(--card);
   border-radius: 8px;
-  height: 65px;
+  height: 85px;
   display: none;
   position: absolute;
   top: 120px;
@@ -178,6 +178,7 @@ body {
   padding: calc(30px + env(safe-area-inset-top)) 20px 20px 20px;
 }
 .detail-block {
+  margin-top: 50px;
   background: var(--card);
   padding: 20px;
   border-radius: 12px;
