@@ -38,7 +38,7 @@ body {
   font-weight: bold;
 }
 .icon-btn {
-  font-size: 22px;
+  font-size: 30px;
   cursor: pointer;
   color: var(--accent);
   padding: 5px;
@@ -259,4 +259,28 @@ body {
 .reset-btn:active {
   opacity: 1;
   background: rgba(255, 82, 82, 0.1) !important;
+}
+/* Sadece X butonunu sağ üstte büyütür */
+.analytics-header {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 60px !important;
+}
+
+#analytics-page .icon-btn:last-of-type {
+  position: absolute !important;
+  top: -15px !important; /* Sayfanın en tepesine sıfırlar */
+  right: -15px !important; /* En sağ köşeye sıfırlar */
+  width: 70px !important; /* Çok büyük dokunma alanı */
+  height: 70px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 35px !important; /* X simgesini büyütür */
+  background: transparent !important;
+  color: var(--accent) !important;
+  z-index: 9999 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
