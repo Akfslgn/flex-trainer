@@ -109,9 +109,7 @@ cBtn.addEventListener("touchstart", () => {
   document.getElementById("a-ms").innerText = aMs;
 
   let status = "fail";
-  if (rMs < 10 || aMs < 10) {
-    showFeedback("⚠️ BOT WARNING", "orange");
-  } else if (rMs > 150 || aMs > 150) {
+  if (rMs > 150 || aMs > 150) {
     showFeedback("❌ MISSED", "var(--error)");
   } else {
     showFeedback("✅ SECURED", "var(--success)");
