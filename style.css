@@ -5,16 +5,14 @@
   --text: #e0e0e0;
   --success: #00e676;
   --error: #ff5252;
-  --info: #2979ff;
 }
-
 * {
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
+  user-select: none;
 }
-
 body {
-  margin: 20px;
+  margin: 0;
   padding: 0;
   background: var(--bg);
   color: var(--text);
@@ -23,24 +21,28 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* Header & Stats (Değişmedi) */
 .app-header {
-  height: 60px;
+  padding-top: env(safe-area-inset-top);
+  height: calc(60px + env(safe-area-inset-top));
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #000;
   border-bottom: 2px solid var(--accent);
-  padding: 0 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-weight: bold;
 }
-
 .icon-btn {
-  font-size: 24px;
+  font-size: 22px;
   cursor: pointer;
   color: var(--accent);
+  padding: 5px;
 }
-
 .stats-bar {
   display: flex;
   background: #1a1a1a;
@@ -53,12 +55,16 @@ body {
   flex: 1;
   border-right: 1px solid #333;
 }
+.stats-bar div:last-child {
+  border-right: none;
+}
 .stats-bar b {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--accent);
 }
 
+/* Analytics (Değişmedi) */
 #analytics-page {
   position: fixed;
   top: 0;
@@ -69,103 +75,139 @@ body {
   z-index: 2000;
   display: none;
   flex-direction: column;
-  padding: 20px;
-  padding-top: 60px;
+  padding: calc(20px + env(safe-area-inset-top)) 20px 20px 20px;
   overflow-y: auto;
 }
-
-.analytics-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
 .stat-card {
   background: var(--card);
   padding: 15px;
   border-radius: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   border: 1px solid #333;
 }
 .stat-card h3 {
   margin: 0;
-  font-size: 14px;
-  color: #aaa;
+  font-size: 12px;
+  color: #888;
 }
 .stat-card .val {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
   color: var(--accent);
   margin-top: 5px;
 }
-
 .graph-container {
   display: flex;
   align-items: flex-end;
-  height: 100px;
-  gap: 5px;
-  margin-top: 15px;
+  height: 60px;
+  gap: 4px;
+  margin-top: 10px;
 }
 .graph-bar {
   flex: 1;
   background: var(--accent);
-  border-radius: 3px 3px 0 0;
-  min-height: 5px;
-  transition: height 0.5s;
+  border-radius: 2px;
+  min-height: 2px;
 }
 
 .container {
   flex-grow: 1;
   position: relative;
-  padding: 20px;
+  padding: 15px;
+}
+.status-text {
+  text-align: center;
+  color: #333;
+  margin-top: 40px;
 }
 
-.training-card {
+/* YENİ: Kompakt Kart Tasarımı */
+.compact-card {
   background: var(--card);
-  border-radius: 12px;
-  padding: 16px;
-  border-left: 6px solid var(--accent);
+  border-radius: 8px;
+  height: 65px;
   display: none;
   position: absolute;
   top: 120px;
-  left: 15px;
-  right: 15px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  left: 10px;
+  right: 10px;
+  border: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
-
-.price-tag {
-  font-size: 22px;
+.compact-card h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #fff;
+}
+.compact-card p {
+  margin: 2px 0;
+  color: #aaa;
+  font-size: 11px;
+}
+.compact-card .card-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.compact-card .price-val {
+  font-size: 18px;
   font-weight: bold;
   color: var(--success);
+}
+.compact-card .arrow-icon {
+  font-size: 24px;
+  color: #555;
+  font-weight: 300;
+}
+
+/* YENİ: Detay Sayfası Tasarımı */
+.detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  padding: calc(30px + env(safe-area-inset-top)) 20px 20px 20px;
+}
+.detail-block {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #333;
 }
 
 #coach-feedback {
   position: absolute;
-  top: 40%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 85%;
+  width: 80%;
   text-align: center;
-  font-weight: bold;
+  font-weight: 800;
   font-size: 20px;
   display: none;
-  z-index: 100;
+  z-index: 1100;
   padding: 20px;
   border-radius: 15px;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.95);
 }
 
+/* Footer & Butonlar (Değişmedi) */
 .footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 20px 15px 40px 15px;
+  padding: 15px 15px 30px 15px;
   display: flex;
   gap: 10px;
+  z-index: 1050;
+  position: relative;
 }
-
 .btn {
   height: 55px;
   flex: 1;
@@ -178,6 +220,12 @@ body {
 .primary-btn {
   background: var(--accent);
   color: #000;
+  width: 100%;
+}
+.secondary-btn {
+  background: #2d2d2d;
+  color: #fff;
+  display: none;
 }
 .success-btn {
   background: var(--success);
@@ -185,8 +233,9 @@ body {
   display: none;
 }
 .reset-btn {
-  background: #444;
-  color: #fff;
+  background: #311;
+  color: var(--error);
   width: 100%;
-  margin-top: 10px;
+  margin-top: 15px;
+  border: 1px solid var(--error);
 }
