@@ -1,184 +1,384 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>Gig Reflex Pro - Analytics</title>
     <style>
-        :root { --flex-blue: #00769A; --error-red: #d32f2f; --success-green: #2e7d32; }
-        html, body { overflow: hidden; width: 100%; height: 100%; margin: 0; padding: 0; touch-action: none; background: #fff; position: fixed; }
-        body { font-family: -apple-system, sans-serif; display: flex; flex-direction: column; }
+      :root {
+        --accent: #ff8c00;
+        --bg: #121212;
+        --card: #1e1e1e;
+        --text: #e0e0e0;
+        --success: #00e676;
+        --error: #ff5252;
+        --info: #2979ff;
+      }
+      * {
+        -webkit-tap-highlight-color: transparent;
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, sans-serif;
+        height: 100vh;
+        overflow: hidden;
+      }
 
-        .header { height: 44px; display: flex; align-items: center; justify-content: center; font-weight: 600; border-bottom: 1px solid #eee; padding-top: env(safe-area-inset-top); }
-        
-        .stats {
-            padding: 8px 5px; background: #fdfdfd; font-size: 9px;
-            display: flex; justify-content: space-around; border-bottom: 1px solid #eee;
-            text-align: center; line-height: 1.4;
-        }
-        .stats div { flex: 1; border-right: 1px solid #eee; }
-        .stats div:last-child { border-right: none; }
-        .stats b { display: block; font-size: 12px; color: #333; }
-        .stats span { font-family: monospace; font-size: 13px; font-weight: bold; color: var(--flex-blue); }
+      /* HEADER & ICONS */
+      .app-header {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #000;
+        border-bottom: 2px solid var(--accent);
+        padding: 0 20px;
+      }
+      .icon-btn {
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--accent);
+      }
 
-        .main-container { flex-grow: 1; padding: 10px; position: relative; }
-        
-        /* GÜNCELLEME: OFFER KARTINI 1 CM AŞAĞI KAYDIRDIK */
-        .offer-card { 
-            background: #fff; border: 1px solid #ddd; border-radius: 4px; 
-            padding: 10px 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); display: none;
-            
-            /* Konumlandırma Ayarları */
-            position: absolute; 
-            top: 130px; /* 1 cm (38px) aşağı kaydırıldı (Önceki top: 80px civarıydı) */
-            left: 10px; right: 10px; /* Kenarlara sabitleme */
-            margin: 0; 
-        }
-        
-        #result-msg { 
-            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
-            width: 80%; text-align: center; font-weight: bold; font-size: 18px; display: none; 
-            padding: 20px; border-radius: 8px; z-index: 50;
-        }
+      /* STATS BAR */
+      .stats-bar {
+        display: flex;
+        background: #1a1a1a;
+        padding: 10px;
+        border-bottom: 1px solid #333;
+        font-size: 10px;
+        text-align: center;
+      }
+      .stats-bar div {
+        flex: 1;
+        border-right: 1px solid #333;
+      }
+      .stats-bar b {
+        display: block;
+        font-size: 12px;
+        color: var(--accent);
+      }
 
-        .footer {
-            position: absolute; bottom: 0px; left: 0; width: 100%; background: #fff;
-            padding: 8px 15px 12px 15px; margin-bottom: -15px; 
-            border-top: 1px solid #eee; display: flex; gap: 10px; box-sizing: border-box; z-index: 10000;
-        }
-        .btn { height: 48px; flex: 1; border-radius: 4px; font-size: 16px; font-weight: 600; border: none; -webkit-tap-highlight-color: transparent; }
-        #refresh-btn { background: var(--flex-blue); color: white; width: 100%; }
-        #decline-btn { background: white; color: var(--flex-blue); border: 1px solid var(--flex-blue); display: none; }
-        #schedule-btn { background: var(--flex-blue); color: white; display: none; }
+      /* ANALYTICS OVERLAY */
+      #analytics-page {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        z-index: 2000;
+        display: none;
+        flex-direction: column;
+        padding: 20px;
+        padding-top: 60px;
+        overflow-y: auto;
+      }
+      .stat-card {
+        background: var(--card);
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #333;
+      }
+      .stat-card h3 {
+        margin: 0;
+        font-size: 14px;
+        color: #aaa;
+      }
+      .stat-card .val {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--accent);
+        margin-top: 5px;
+      }
+
+      /* MINI GRAPH SIMULATION */
+      .graph-container {
+        display: flex;
+        align-items: flex-end;
+        height: 100px;
+        gap: 5px;
+        margin-top: 15px;
+      }
+      .graph-bar {
+        flex: 1;
+        background: var(--accent);
+        border-radius: 3px 3px 0 0;
+        min-height: 5px;
+        transition: height 0.5s;
+      }
+
+      /* MAIN UI Elements */
+      .container {
+        flex-grow: 1;
+        position: relative;
+        padding: 20px;
+      }
+      .training-card {
+        background: var(--card);
+        border-radius: 12px;
+        padding: 16px;
+        border-left: 6px solid var(--accent);
+        display: none;
+        position: absolute;
+        top: 120px;
+        left: 15px;
+        right: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+      }
+
+      #coach-feedback {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 85%;
+        text-align: center;
+        font-weight: bold;
+        font-size: 20px;
+        display: none;
+        z-index: 100;
+        padding: 20px;
+        border-radius: 15px;
+        background: rgba(0, 0, 0, 0.9);
+      }
+
+      .footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px 15px 40px 15px;
+        display: flex;
+        gap: 10px;
+      }
+      .btn {
+        height: 55px;
+        flex: 1;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+      }
+      #main-action {
+        background: var(--accent);
+        color: #000;
+      }
+      #confirm-action {
+        background: var(--success);
+        color: #000;
+        display: none;
+      }
     </style>
-</head>
-<body>
-
-    <div class="header">Offers</div>
-    
-    <div class="stats">
-        <div><b>Refresh</b><span id="ref-ms">0</span>ms</div>
-        <div><b>Offer</b><span id="off-ms">0</span>ms</div>
-        <div><b>Schedule</b><span id="sch-ms">0</span>ms</div>
+  </head>
+  <body>
+    <div class="app-header">
+      <span>GIG REFLEX PRO</span>
+      <span class="icon-btn" onclick="toggleAnalytics()">📈</span>
     </div>
 
-    <div id="result-msg"></div>
+    <div id="analytics-page">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+        "
+      >
+        <h2 style="margin: 0">Analytics</h2>
+        <span class="icon-btn" onclick="toggleAnalytics()">✕</span>
+      </div>
 
-    <div class="main-container">
-        <div id="ui-elements" style="font-size: 13px;">
-            <div style="color: var(--flex-blue); display:flex; justify-content:space-between; margin-bottom: 8px;">
-                <b>≡ Filter</b> <span style="color:#666">0 of 20 offers</span>
-            </div>
-            <div style="background:#e3f2fd; color:#1976d2; padding:4px 10px; border-radius:15px; font-size:11px; display:inline-block;">Stations (1) ✕</div>
-            <div id="empty-msg" style="margin-top: 40px; text-align: center; color: #bbb;">Searching for blocks...</div>
-        </div>
+      <div class="stat-card">
+        <h3>Personal Best (Reaction)</h3>
+        <div id="pb-val" class="val">0 ms</div>
+      </div>
 
-        <div id="offer-card" class="offer-card">
-            <b style="font-size: 14px;">Whole Foods - Albany</b><br>
-            <span style="font-size: 12px;">2 hr block • Today</span><br>
-            <b style="font-size: 16px; color: #000;">$54.00</b>
-        </div>
+      <div class="stat-card">
+        <h3>Success Rate</h3>
+        <div id="success-rate" class="val">0%</div>
+      </div>
 
-        <div id="detail-view" style="display: none; font-size: 13px;">
-            <h3 style="margin:0 0 10px 0;">Offer Details</h3>
-            <div style="padding:15px; border:1px solid #ddd; border-radius:4px; background:#fafafa;">
-                <b>Albany (WF)</b><hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
-                <b style="font-size: 18px;">$54.00</b>
-            </div>
+      <div class="stat-card">
+        <h3>Last 10 Attempts (ms)</h3>
+        <div id="graph" class="graph-container"></div>
+      </div>
+
+      <button
+        class="btn"
+        style="background: #444; color: #fff; width: 100%"
+        onclick="clearStats()"
+      >
+        RESET DATA
+      </button>
+    </div>
+
+    <div class="stats-bar">
+      <div><b>SCAN</b><span id="s-ms">0</span>ms</div>
+      <div><b>REACT</b><span id="r-ms">0</span>ms</div>
+      <div><b>ACTION</b><span id="a-ms">0</span>ms</div>
+    </div>
+
+    <div class="container">
+      <div id="target-card" class="training-card">
+        <h2>NEW OPPORTUNITY</h2>
+        <p>Station: ALPHA-1</p>
+        <div style="font-size: 22px; font-weight: bold; color: var(--success)">
+          $72.00
         </div>
+      </div>
+      <div id="coach-feedback"></div>
     </div>
 
     <div class="footer">
-        <button id="refresh-btn" class="btn">Refresh</button>
-        <button id="decline-btn" class="btn">Decline</button>
-        <button id="schedule-btn" class="btn">Schedule</button>
+      <button id="main-action" class="btn">REFRESH SCAN</button>
+      <button id="confirm-action" class="btn">CONFIRM ACTION</button>
     </div>
 
     <script>
-        const rBtn = document.getElementById('refresh-btn');
-        const sBtn = document.getElementById('schedule-btn');
-        const dBtn = document.getElementById('decline-btn');
-        const card = document.getElementById('offer-card');
-        const msg = document.getElementById('result-msg');
-        
-        let offerIsReady = false;
-        let tRefresh, tOffer, tSchedule;
-        let limit = 20; // Rekabet sınırı: 350ms
+      let history = JSON.parse(localStorage.getItem("reflexHistory")) || [];
+      const mBtn = document.getElementById("main-action");
+      const cBtn = document.getElementById("confirm-action");
+      const card = document.getElementById("target-card");
+      const feedback = document.getElementById("coach-feedback");
+      let tScan,
+        tReact,
+        tAction,
+        isReady = false;
 
-        function startGen() { 
-            offerIsReady = false; 
-            setTimeout(() => { offerIsReady = true; }, Math.random() * 5000 + 2000); 
+      function toggleAnalytics() {
+        const page = document.getElementById("analytics-page");
+        if (page.style.display === "flex") {
+          page.style.display = "none";
+        } else {
+          updateAnalyticsUI();
+          page.style.display = "flex";
         }
+      }
 
-        rBtn.addEventListener('touchstart', (e) => {
-            if(rBtn.disabled) return;
-            msg.style.display = 'none';
-            rBtn.disabled = true;
-            rBtn.innerText = "Refreshing...";
-            tRefresh = performance.now();
+      function updateAnalyticsUI() {
+        const pb = history.length
+          ? Math.min(...history.map((h) => h.react))
+          : 0;
+        const successCount = history.filter(
+          (h) => h.status === "success",
+        ).length;
+        const rate = history.length
+          ? Math.round((successCount / history.length) * 100)
+          : 0;
 
-            const randomRefreshDelay = Math.floor(Math.random() * (1200 - 700 + 1)) + 700;
-            
-            setTimeout(() => {
-                const refreshTime = Math.round(performance.now() - tRefresh);
-                document.getElementById('ref-ms').innerText = refreshTime;
-                
-                if(offerIsReady) {
-                    document.getElementById('empty-msg').style.display = 'none';
-                    card.style.display = 'block';
-                    tOffer = performance.now();
-                }
-                rBtn.disabled = false;
-                rBtn.innerText = "Refresh";
-            }, randomRefreshDelay);
+        document.getElementById("pb-val").innerText = pb + " ms";
+        document.getElementById("success-rate").innerText = rate + "%";
+
+        const graph = document.getElementById("graph");
+        graph.innerHTML = "";
+        history.slice(-10).forEach((h) => {
+          const bar = document.createElement("div");
+          bar.className = "graph-bar";
+          bar.style.height = Math.min(h.react / 5, 100) + "%";
+          if (h.status !== "success") bar.style.background = "var(--error)";
+          graph.appendChild(bar);
         });
+      }
 
-        card.addEventListener('touchstart', () => {
-            const offerTime = Math.round(performance.now() - tOffer);
-            document.getElementById('off-ms').innerText = offerTime;
-            
-            document.getElementById('detail-view').style.display = 'block';
-            document.getElementById('ui-elements').style.display = 'none';
-            card.style.display = 'none';
-            rBtn.style.display = 'none';
-            dBtn.style.display = 'block';
-            sBtn.style.display = 'block';
-            tSchedule = performance.now();
-        });
+      function saveAttempt(react, status) {
+        history.push({ react, status, time: Date.now() });
+        if (history.length > 100) history.shift();
+        localStorage.setItem("reflexHistory", JSON.stringify(history));
+      }
 
-        sBtn.addEventListener('touchstart', () => {
-            const scheduleTime = Math.round(performance.now() - tSchedule);
-            document.getElementById('sch-ms').innerText = scheduleTime;
-            
-            const offMs = parseInt(document.getElementById('off-ms').innerText);
-            
-            // KARAR MEKANİZMASI
-            if (offMs > limit || scheduleTime > limit) {
-                msg.innerText = "This offer has been taken by another driver";
-                msg.style.color = "var(--error-red)";
-            } else {
-                msg.innerText = "Scheduled";
-                msg.style.color = "var(--success-green)";
+      function clearStats() {
+        if (confirm("Clear all data?")) {
+          history = [];
+          localStorage.clear();
+          updateAnalyticsUI();
+        }
+      }
+
+      mBtn.addEventListener("touchstart", (e) => {
+        if (mBtn.disabled) return;
+        feedback.style.display = "none";
+        mBtn.disabled = true;
+        tScan = performance.now();
+        setTimeout(
+          () => {
+            document.getElementById("s-ms").innerText = Math.round(
+              performance.now() - tScan,
+            );
+            if (isReady) {
+              if (window.navigator.vibrate) window.navigator.vibrate(40);
+              card.style.display = "block";
+              tReact = performance.now();
             }
-            msg.style.display = 'block';
-            reset();
-        });
+            mBtn.disabled = false;
+          },
+          Math.random() * 500 + 700,
+        );
+      });
 
-        dBtn.addEventListener('touchstart', reset);
+      card.addEventListener("touchstart", () => {
+        document.getElementById("r-ms").innerText = Math.round(
+          performance.now() - tReact,
+        );
+        card.style.display = "none";
+        mBtn.style.display = "none";
+        cBtn.style.display = "block";
+        tAction = performance.now();
+      });
 
-        function reset() {
-            document.getElementById('detail-view').style.display = 'none';
-            document.getElementById('ui-elements').style.display = 'block';
-            document.getElementById('empty-msg').style.display = 'block';
-            rBtn.style.display = 'block';
-            dBtn.style.display = 'none';
-            sBtn.style.display = 'none';
-            startGen();
+      cBtn.addEventListener("touchstart", () => {
+        const rMs = parseInt(document.getElementById("r-ms").innerText);
+        const aMs = Math.round(performance.now() - tAction);
+        document.getElementById("a-ms").innerText = aMs;
+
+        let status = "fail";
+        if (rMs < 110) {
+          showFeedback("⚠️ ROBOTIC!", "orange");
+        } else if (rMs > 280 || aMs > 280) {
+          showFeedback("❌ SLOW", "var(--error)");
+        } else {
+          showFeedback("✅ PERFECT", "var(--success)");
+          status = "success";
         }
 
-        document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-        window.onload = startGen;
+        saveAttempt(rMs, status);
+        resetApp();
+      });
+
+      function showFeedback(text, color) {
+        feedback.innerText = text;
+        feedback.style.color = color;
+        feedback.style.display = "block";
+      }
+
+      function resetApp() {
+        cBtn.style.display = "none";
+        mBtn.style.display = "block";
+        isReady = false;
+        setTimeout(
+          () => {
+            isReady = true;
+          },
+          Math.random() * 3000 + 2000,
+        );
+      }
+
+      document.addEventListener("touchmove", (e) => e.preventDefault(), {
+        passive: false,
+      });
+      window.onload = () => {
+        isReady = true;
+      };
     </script>
-</body>
+  </body>
 </html>
