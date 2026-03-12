@@ -80,9 +80,9 @@ body {
 }
 .stat-card {
   background: var(--card);
-  padding: 15px;
+  padding: 12px 15px; /* İç boşluğu azalttık */
   border-radius: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   border: 1px solid #333;
 }
 .stat-card h3 {
@@ -233,9 +233,30 @@ body {
   display: none;
 }
 .reset-btn {
-  background: #311;
-  color: var(--error);
-  width: 100%;
-  margin-top: 15px;
-  border: 1px solid var(--error);
+  /* Esnemeyi durdur */
+  display: block !important;
+  align-self: center !important;
+
+  /* Boyutları kilitle */
+  width: 100% !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
+
+  /* Görünüm */
+  margin: 40px auto 20px auto !important;
+  background: transparent !important;
+  color: var(--error) !important;
+  border: 1px solid var(--error) !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  opacity: 0.5;
+}
+
+.reset-btn:active {
+  opacity: 1;
+  background: rgba(255, 82, 82, 0.1) !important;
 }
